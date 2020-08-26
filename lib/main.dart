@@ -1,4 +1,5 @@
 import 'package:KBook_SaadAhmed/src/cubit/books_cubit.dart';
+import 'package:KBook_SaadAhmed/src/views/books_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
+            
           ),
-          home: Text("Books"),
+          home: BooksView(),
         ));
   }
 }

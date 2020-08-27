@@ -1,10 +1,11 @@
 import 'package:KBook_SaadAhmed/src/cubit/books_cubit.dart';
+
 import 'package:KBook_SaadAhmed/src/views/books_details_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:loadany/loadany.dart';
 
 class BooksView extends StatefulWidget {
   @override
@@ -12,10 +13,18 @@ class BooksView extends StatefulWidget {
 }
 
 class _BooksViewState extends State<BooksView> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+    LoadStatus status = LoadStatus.normal;
+    ScrollController _controller;
+  @override
+  void initState() {
+     _controller = ScrollController(
+      initialScrollOffset: 0.0
+    );
+    BlocProvider.of<BooksCubit>(context).fetchBooks();
+    super.initState();
+  }
 
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +37,7 @@ class _BooksViewState extends State<BooksView> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          IconButton(icon: Icon(Icons.favorite_border), onPressed: () {})
+          IconButton(icon: Icon(Icons.favorite_border), onPressed: () async {})
         ],
       ),
       body: Padding(
@@ -61,75 +70,118 @@ class _BooksViewState extends State<BooksView> {
   }
 
   Widget _buildBooksList() {
-    return BlocBuilder<BooksCubit, BooksState>(
+    return BlocConsumer<BooksCubit, BooksState>(
+      listener: (context, state) {
+        if (state is BooksError) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
-        // Do state based building
-        return SmartRefresher(
-          enablePullDown: false,
-          enablePullUp: true,
-          header: WaterDropHeader(),
-          footer: CustomFooter(
-            builder: (BuildContext context, LoadStatus mode) {
-              Widget body;
-              if (mode == LoadStatus.idle) {
-                body = Text("Pull up load");
-              } else if (mode == LoadStatus.loading) {
-                body = CupertinoActivityIndicator();
-              } else if (mode == LoadStatus.failed) {
-                body = Text("Load Failed! Click retry!");
-              } else if (mode == LoadStatus.canLoading) {
-                body = Text("release to load more");
-              } else {
-                body = Text("No more Data");
-              }
-              return Container(
-                height: 55.0,
-                child: Center(child: body),
-              );
-            },
-          ),
-          controller: _refreshController,
-          // onRefresh: _onRefresh,
-          onLoading: () async{
-             await Future.delayed(Duration(milliseconds: 1000));
-            
-            // if failed,use loadFailed(),if no data return,use LoadNodata()
-           // items.add((items.length + 1).toString());
-            if (mounted) setState(() {});
-           // _refreshController.loadComplete();
-            _refreshController.loadFailed();
-            
-          },
-          child: GridView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            physics: BouncingScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 2 / 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                crossAxisCount: 2),
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BookDetailsView()));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                              "https://images-na.ssl-images-amazon.com/images/I/51YQZtSgfBL._SX397_BO1,204,203,200_.jpg"))),
-                ),
-              );
-            },
-          ),
-        );
+        if (state is BooksInitial) {
+          return Offstage();
+        } else if (state is BooksLoading) {
+           return Center(child:CircularProgressIndicator());
+        } else if (state is BooksLoaded) {
+
+          if(_controller.hasClients){
+ _controller.animateTo( _controller.position.maxScrollExtent, duration: Duration(milliseconds: 1000), curve:  Curves.ease);
+         
+          }
+          return LoadAny(
+              status: status,
+              loadingMsg: 'Loading',
+              errorMsg: 'Failed to load',
+              finishMsg: 'loaded',
+              onLoadMore: () async {
+                setState(() {
+                  status = LoadStatus.loading;
+                });
+                print("onLoadMore");
+                await Future.delayed(Duration(seconds: 0, milliseconds: 100));
+                await context
+                    .bloc<BooksCubit>()
+                    .fetchBooks(startIndex: state.volumes.length - 1);
+                setState(() {
+                  status = LoadStatus.normal;
+                });
+              },
+              child: _booksList(state));
+        }
       },
     );
+  }
+
+
+
+  Widget _booksList(state) {
+    return CustomScrollView(
+      controller: _controller,
+      slivers: [
+        SliverGrid(
+
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 2 / 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              crossAxisCount: 2),
+          delegate:
+              SliverChildBuilderDelegate(
+                
+                (BuildContext context, int index) {
+            final volume = state.volumes[index];
+
+            return InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => BookDetailsView()));
+              },
+              child: volume.volumeInfo.imageLinks?.thumbnail == null
+                  ? Center(child: Text("No Preview"))
+                  : Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  volume.volumeInfo?.imageLinks?.thumbnail))),
+                    ),
+            );
+          },
+          
+           childCount: state.volumes.length),
+        ),
+      ],
+    );
+  }
+
+   showOverlay(BuildContext context) async {
+    OverlayState overlayState = Overlay.of(context);
+    OverlayEntry overlayEntry = OverlayEntry(
+        builder: (context) => Align(
+              alignment: Alignment.bottomCenter,
+              child: CircularProgressIndicator()
+            ));
+
+// OverlayEntry overlayEntry = OverlayEntry(
+//         builder: (context) => Positioned(
+//               top: MediaQuery.of(context).size.height / 2.0,
+//               width: MediaQuery.of(context).size.width / 2.0,
+//               child: CircleAvatar(
+//                 radius: 50.0,
+//                 backgroundColor: Colors.red,
+//                 child: Text("1"),
+//               ),
+//             ));
+    overlayState.insert(overlayEntry);
+
+    await Future.delayed(Duration(seconds: 2));
+
+    overlayEntry.remove();
   }
 }
 

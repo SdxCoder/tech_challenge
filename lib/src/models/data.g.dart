@@ -29,42 +29,40 @@ _$_VolumeInfo _$_$_VolumeInfoFromJson(Map<String, dynamic> json) {
     json['imageLinks'] == null
         ? null
         : ImageLinks.fromJson(json['imageLinks'] as Map<String, dynamic>),
+    json['description'] as String,
     json['title'] as String,
     (json['authors'] as List)?.map((e) => e as String)?.toList(),
-    json['buyLink'] as String,
   );
 }
 
 Map<String, dynamic> _$_$_VolumeInfoToJson(_$_VolumeInfo instance) =>
     <String, dynamic>{
       'imageLinks': instance.imageLinks,
+      'description': instance.description,
       'title': instance.title,
       'authors': instance.authors,
-      'buyLink': instance.buyLink,
     };
 
 _$_ImageLinks _$_$_ImageLinksFromJson(Map<String, dynamic> json) {
   return _$_ImageLinks(
-    json['large'] as String,
-    json['extraLarge'] as String,
+    json['smallThumbnail'] as String,
+    json['thumbnail'] as String,
   );
 }
 
 Map<String, dynamic> _$_$_ImageLinksToJson(_$_ImageLinks instance) =>
     <String, dynamic>{
-      'large': instance.large,
-      'extraLarge': instance.extraLarge,
+      'smallThumbnail': instance.smallThumbnail,
+      'thumbnail': instance.thumbnail,
     };
 
 _$_SaleInfo _$_$_SaleInfoFromJson(Map<String, dynamic> json) {
   return _$_SaleInfo(
-    json['country'] as String,
     json['buyLink'] as String,
   );
 }
 
 Map<String, dynamic> _$_$_SaleInfoToJson(_$_SaleInfo instance) =>
     <String, dynamic>{
-      'country': instance.country,
       'buyLink': instance.buyLink,
     };

@@ -199,13 +199,16 @@ class _$VolumeInfoTearOff {
   const _$VolumeInfoTearOff();
 
 // ignore: unused_element
-  _VolumeInfo call(ImageLinks imageLinks, String title, List<String> authors,
-      String buyLink) {
+  _VolumeInfo call(
+      @nullable ImageLinks imageLinks,
+      @nullable String description,
+      @nullable String title,
+      @nullable List<String> authors) {
     return _VolumeInfo(
       imageLinks,
+      description,
       title,
       authors,
-      buyLink,
     );
   }
 }
@@ -214,10 +217,14 @@ class _$VolumeInfoTearOff {
 const $VolumeInfo = _$VolumeInfoTearOff();
 
 mixin _$VolumeInfo {
+  @nullable
   ImageLinks get imageLinks;
+  @nullable
+  String get description;
+  @nullable
   String get title;
+  @nullable
   List<String> get authors;
-  String get buyLink;
 
   Map<String, dynamic> toJson();
   $VolumeInfoCopyWith<VolumeInfo> get copyWith;
@@ -228,10 +235,10 @@ abstract class $VolumeInfoCopyWith<$Res> {
           VolumeInfo value, $Res Function(VolumeInfo) then) =
       _$VolumeInfoCopyWithImpl<$Res>;
   $Res call(
-      {ImageLinks imageLinks,
-      String title,
-      List<String> authors,
-      String buyLink});
+      {@nullable ImageLinks imageLinks,
+      @nullable String description,
+      @nullable String title,
+      @nullable List<String> authors});
 
   $ImageLinksCopyWith<$Res> get imageLinks;
 }
@@ -246,16 +253,17 @@ class _$VolumeInfoCopyWithImpl<$Res> implements $VolumeInfoCopyWith<$Res> {
   @override
   $Res call({
     Object imageLinks = freezed,
+    Object description = freezed,
     Object title = freezed,
     Object authors = freezed,
-    Object buyLink = freezed,
   }) {
     return _then(_value.copyWith(
       imageLinks:
           imageLinks == freezed ? _value.imageLinks : imageLinks as ImageLinks,
+      description:
+          description == freezed ? _value.description : description as String,
       title: title == freezed ? _value.title : title as String,
       authors: authors == freezed ? _value.authors : authors as List<String>,
-      buyLink: buyLink == freezed ? _value.buyLink : buyLink as String,
     ));
   }
 
@@ -276,10 +284,10 @@ abstract class _$VolumeInfoCopyWith<$Res> implements $VolumeInfoCopyWith<$Res> {
       __$VolumeInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {ImageLinks imageLinks,
-      String title,
-      List<String> authors,
-      String buyLink});
+      {@nullable ImageLinks imageLinks,
+      @nullable String description,
+      @nullable String title,
+      @nullable List<String> authors});
 
   @override
   $ImageLinksCopyWith<$Res> get imageLinks;
@@ -297,42 +305,43 @@ class __$VolumeInfoCopyWithImpl<$Res> extends _$VolumeInfoCopyWithImpl<$Res>
   @override
   $Res call({
     Object imageLinks = freezed,
+    Object description = freezed,
     Object title = freezed,
     Object authors = freezed,
-    Object buyLink = freezed,
   }) {
     return _then(_VolumeInfo(
       imageLinks == freezed ? _value.imageLinks : imageLinks as ImageLinks,
+      description == freezed ? _value.description : description as String,
       title == freezed ? _value.title : title as String,
       authors == freezed ? _value.authors : authors as List<String>,
-      buyLink == freezed ? _value.buyLink : buyLink as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_VolumeInfo implements _VolumeInfo {
-  const _$_VolumeInfo(this.imageLinks, this.title, this.authors, this.buyLink)
-      : assert(imageLinks != null),
-        assert(title != null),
-        assert(authors != null),
-        assert(buyLink != null);
+  const _$_VolumeInfo(@nullable this.imageLinks, @nullable this.description,
+      @nullable this.title, @nullable this.authors);
 
   factory _$_VolumeInfo.fromJson(Map<String, dynamic> json) =>
       _$_$_VolumeInfoFromJson(json);
 
   @override
+  @nullable
   final ImageLinks imageLinks;
   @override
+  @nullable
+  final String description;
+  @override
+  @nullable
   final String title;
   @override
+  @nullable
   final List<String> authors;
-  @override
-  final String buyLink;
 
   @override
   String toString() {
-    return 'VolumeInfo(imageLinks: $imageLinks, title: $title, authors: $authors, buyLink: $buyLink)';
+    return 'VolumeInfo(imageLinks: $imageLinks, description: $description, title: $title, authors: $authors)';
   }
 
   @override
@@ -342,22 +351,22 @@ class _$_VolumeInfo implements _VolumeInfo {
             (identical(other.imageLinks, imageLinks) ||
                 const DeepCollectionEquality()
                     .equals(other.imageLinks, imageLinks)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.authors, authors) ||
-                const DeepCollectionEquality()
-                    .equals(other.authors, authors)) &&
-            (identical(other.buyLink, buyLink) ||
-                const DeepCollectionEquality().equals(other.buyLink, buyLink)));
+                const DeepCollectionEquality().equals(other.authors, authors)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(imageLinks) ^
+      const DeepCollectionEquality().hash(description) ^
       const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(authors) ^
-      const DeepCollectionEquality().hash(buyLink);
+      const DeepCollectionEquality().hash(authors);
 
   @override
   _$VolumeInfoCopyWith<_VolumeInfo> get copyWith =>
@@ -370,20 +379,27 @@ class _$_VolumeInfo implements _VolumeInfo {
 }
 
 abstract class _VolumeInfo implements VolumeInfo {
-  const factory _VolumeInfo(ImageLinks imageLinks, String title,
-      List<String> authors, String buyLink) = _$_VolumeInfo;
+  const factory _VolumeInfo(
+      @nullable ImageLinks imageLinks,
+      @nullable String description,
+      @nullable String title,
+      @nullable List<String> authors) = _$_VolumeInfo;
 
   factory _VolumeInfo.fromJson(Map<String, dynamic> json) =
       _$_VolumeInfo.fromJson;
 
   @override
+  @nullable
   ImageLinks get imageLinks;
   @override
+  @nullable
+  String get description;
+  @override
+  @nullable
   String get title;
   @override
+  @nullable
   List<String> get authors;
-  @override
-  String get buyLink;
   @override
   _$VolumeInfoCopyWith<_VolumeInfo> get copyWith;
 }
@@ -396,10 +412,11 @@ class _$ImageLinksTearOff {
   const _$ImageLinksTearOff();
 
 // ignore: unused_element
-  _ImageLinks call(String large, String extraLarge) {
+  _ImageLinks call(
+      @nullable String smallThumbnail, @nullable String thumbnail) {
     return _ImageLinks(
-      large,
-      extraLarge,
+      smallThumbnail,
+      thumbnail,
     );
   }
 }
@@ -408,8 +425,10 @@ class _$ImageLinksTearOff {
 const $ImageLinks = _$ImageLinksTearOff();
 
 mixin _$ImageLinks {
-  String get large;
-  String get extraLarge;
+  @nullable
+  String get smallThumbnail;
+  @nullable
+  String get thumbnail;
 
   Map<String, dynamic> toJson();
   $ImageLinksCopyWith<ImageLinks> get copyWith;
@@ -419,7 +438,7 @@ abstract class $ImageLinksCopyWith<$Res> {
   factory $ImageLinksCopyWith(
           ImageLinks value, $Res Function(ImageLinks) then) =
       _$ImageLinksCopyWithImpl<$Res>;
-  $Res call({String large, String extraLarge});
+  $Res call({@nullable String smallThumbnail, @nullable String thumbnail});
 }
 
 class _$ImageLinksCopyWithImpl<$Res> implements $ImageLinksCopyWith<$Res> {
@@ -431,13 +450,14 @@ class _$ImageLinksCopyWithImpl<$Res> implements $ImageLinksCopyWith<$Res> {
 
   @override
   $Res call({
-    Object large = freezed,
-    Object extraLarge = freezed,
+    Object smallThumbnail = freezed,
+    Object thumbnail = freezed,
   }) {
     return _then(_value.copyWith(
-      large: large == freezed ? _value.large : large as String,
-      extraLarge:
-          extraLarge == freezed ? _value.extraLarge : extraLarge as String,
+      smallThumbnail: smallThumbnail == freezed
+          ? _value.smallThumbnail
+          : smallThumbnail as String,
+      thumbnail: thumbnail == freezed ? _value.thumbnail : thumbnail as String,
     ));
   }
 }
@@ -447,7 +467,7 @@ abstract class _$ImageLinksCopyWith<$Res> implements $ImageLinksCopyWith<$Res> {
           _ImageLinks value, $Res Function(_ImageLinks) then) =
       __$ImageLinksCopyWithImpl<$Res>;
   @override
-  $Res call({String large, String extraLarge});
+  $Res call({@nullable String smallThumbnail, @nullable String thumbnail});
 }
 
 class __$ImageLinksCopyWithImpl<$Res> extends _$ImageLinksCopyWithImpl<$Res>
@@ -461,51 +481,54 @@ class __$ImageLinksCopyWithImpl<$Res> extends _$ImageLinksCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object large = freezed,
-    Object extraLarge = freezed,
+    Object smallThumbnail = freezed,
+    Object thumbnail = freezed,
   }) {
     return _then(_ImageLinks(
-      large == freezed ? _value.large : large as String,
-      extraLarge == freezed ? _value.extraLarge : extraLarge as String,
+      smallThumbnail == freezed
+          ? _value.smallThumbnail
+          : smallThumbnail as String,
+      thumbnail == freezed ? _value.thumbnail : thumbnail as String,
     ));
   }
 }
 
 @JsonSerializable()
 class _$_ImageLinks implements _ImageLinks {
-  const _$_ImageLinks(this.large, this.extraLarge)
-      : assert(large != null),
-        assert(extraLarge != null);
+  const _$_ImageLinks(@nullable this.smallThumbnail, @nullable this.thumbnail);
 
   factory _$_ImageLinks.fromJson(Map<String, dynamic> json) =>
       _$_$_ImageLinksFromJson(json);
 
   @override
-  final String large;
+  @nullable
+  final String smallThumbnail;
   @override
-  final String extraLarge;
+  @nullable
+  final String thumbnail;
 
   @override
   String toString() {
-    return 'ImageLinks(large: $large, extraLarge: $extraLarge)';
+    return 'ImageLinks(smallThumbnail: $smallThumbnail, thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _ImageLinks &&
-            (identical(other.large, large) ||
-                const DeepCollectionEquality().equals(other.large, large)) &&
-            (identical(other.extraLarge, extraLarge) ||
+            (identical(other.smallThumbnail, smallThumbnail) ||
                 const DeepCollectionEquality()
-                    .equals(other.extraLarge, extraLarge)));
+                    .equals(other.smallThumbnail, smallThumbnail)) &&
+            (identical(other.thumbnail, thumbnail) ||
+                const DeepCollectionEquality()
+                    .equals(other.thumbnail, thumbnail)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(large) ^
-      const DeepCollectionEquality().hash(extraLarge);
+      const DeepCollectionEquality().hash(smallThumbnail) ^
+      const DeepCollectionEquality().hash(thumbnail);
 
   @override
   _$ImageLinksCopyWith<_ImageLinks> get copyWith =>
@@ -518,15 +541,19 @@ class _$_ImageLinks implements _ImageLinks {
 }
 
 abstract class _ImageLinks implements ImageLinks {
-  const factory _ImageLinks(String large, String extraLarge) = _$_ImageLinks;
+  const factory _ImageLinks(
+          @nullable String smallThumbnail, @nullable String thumbnail) =
+      _$_ImageLinks;
 
   factory _ImageLinks.fromJson(Map<String, dynamic> json) =
       _$_ImageLinks.fromJson;
 
   @override
-  String get large;
+  @nullable
+  String get smallThumbnail;
   @override
-  String get extraLarge;
+  @nullable
+  String get thumbnail;
   @override
   _$ImageLinksCopyWith<_ImageLinks> get copyWith;
 }
@@ -539,9 +566,8 @@ class _$SaleInfoTearOff {
   const _$SaleInfoTearOff();
 
 // ignore: unused_element
-  _SaleInfo call(String country, String buyLink) {
+  _SaleInfo call(@nullable String buyLink) {
     return _SaleInfo(
-      country,
       buyLink,
     );
   }
@@ -551,7 +577,7 @@ class _$SaleInfoTearOff {
 const $SaleInfo = _$SaleInfoTearOff();
 
 mixin _$SaleInfo {
-  String get country;
+  @nullable
   String get buyLink;
 
   Map<String, dynamic> toJson();
@@ -561,7 +587,7 @@ mixin _$SaleInfo {
 abstract class $SaleInfoCopyWith<$Res> {
   factory $SaleInfoCopyWith(SaleInfo value, $Res Function(SaleInfo) then) =
       _$SaleInfoCopyWithImpl<$Res>;
-  $Res call({String country, String buyLink});
+  $Res call({@nullable String buyLink});
 }
 
 class _$SaleInfoCopyWithImpl<$Res> implements $SaleInfoCopyWith<$Res> {
@@ -573,11 +599,9 @@ class _$SaleInfoCopyWithImpl<$Res> implements $SaleInfoCopyWith<$Res> {
 
   @override
   $Res call({
-    Object country = freezed,
     Object buyLink = freezed,
   }) {
     return _then(_value.copyWith(
-      country: country == freezed ? _value.country : country as String,
       buyLink: buyLink == freezed ? _value.buyLink : buyLink as String,
     ));
   }
@@ -587,7 +611,7 @@ abstract class _$SaleInfoCopyWith<$Res> implements $SaleInfoCopyWith<$Res> {
   factory _$SaleInfoCopyWith(_SaleInfo value, $Res Function(_SaleInfo) then) =
       __$SaleInfoCopyWithImpl<$Res>;
   @override
-  $Res call({String country, String buyLink});
+  $Res call({@nullable String buyLink});
 }
 
 class __$SaleInfoCopyWithImpl<$Res> extends _$SaleInfoCopyWithImpl<$Res>
@@ -600,11 +624,9 @@ class __$SaleInfoCopyWithImpl<$Res> extends _$SaleInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object country = freezed,
     Object buyLink = freezed,
   }) {
     return _then(_SaleInfo(
-      country == freezed ? _value.country : country as String,
       buyLink == freezed ? _value.buyLink : buyLink as String,
     ));
   }
@@ -612,39 +634,31 @@ class __$SaleInfoCopyWithImpl<$Res> extends _$SaleInfoCopyWithImpl<$Res>
 
 @JsonSerializable()
 class _$_SaleInfo implements _SaleInfo {
-  const _$_SaleInfo(this.country, this.buyLink)
-      : assert(country != null),
-        assert(buyLink != null);
+  const _$_SaleInfo(@nullable this.buyLink);
 
   factory _$_SaleInfo.fromJson(Map<String, dynamic> json) =>
       _$_$_SaleInfoFromJson(json);
 
   @override
-  final String country;
-  @override
+  @nullable
   final String buyLink;
 
   @override
   String toString() {
-    return 'SaleInfo(country: $country, buyLink: $buyLink)';
+    return 'SaleInfo(buyLink: $buyLink)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _SaleInfo &&
-            (identical(other.country, country) ||
-                const DeepCollectionEquality()
-                    .equals(other.country, country)) &&
             (identical(other.buyLink, buyLink) ||
                 const DeepCollectionEquality().equals(other.buyLink, buyLink)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(country) ^
-      const DeepCollectionEquality().hash(buyLink);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(buyLink);
 
   @override
   _$SaleInfoCopyWith<_SaleInfo> get copyWith =>
@@ -657,13 +671,12 @@ class _$_SaleInfo implements _SaleInfo {
 }
 
 abstract class _SaleInfo implements SaleInfo {
-  const factory _SaleInfo(String country, String buyLink) = _$_SaleInfo;
+  const factory _SaleInfo(@nullable String buyLink) = _$_SaleInfo;
 
   factory _SaleInfo.fromJson(Map<String, dynamic> json) = _$_SaleInfo.fromJson;
 
   @override
-  String get country;
-  @override
+  @nullable
   String get buyLink;
   @override
   _$SaleInfoCopyWith<_SaleInfo> get copyWith;

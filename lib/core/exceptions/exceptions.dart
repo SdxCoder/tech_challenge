@@ -1,7 +1,7 @@
-class FailureException implements Exception {
+class ServerException implements Exception {
   final String message;
 
-  FailureException(this.message);
+  ServerException(this.message);
 }
 
 class UnknownException implements Exception {

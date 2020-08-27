@@ -19,8 +19,9 @@ abstract class Volume with _$Volume {
 @freezed
 abstract class VolumeInfo with _$VolumeInfo {
   const factory VolumeInfo(
-   ImageLinks imageLinks,
-    String title, List<String> authors, String buyLink, ) = _VolumeInfo;
+   @nullable ImageLinks imageLinks,
+    @nullable String description,
+    @nullable String title,  @nullable List<String> authors, ) = _VolumeInfo;
   
 
   factory VolumeInfo.fromJson(Map<String, dynamic> json) => _$VolumeInfoFromJson(json);
@@ -29,8 +30,8 @@ abstract class VolumeInfo with _$VolumeInfo {
 @freezed
 abstract class ImageLinks with _$ImageLinks {
   const factory ImageLinks(
-    String large,
-     String extraLarge,
+    @nullable String smallThumbnail,
+    @nullable String thumbnail,
     ) = _ImageLinks;
   
 
@@ -40,8 +41,8 @@ abstract class ImageLinks with _$ImageLinks {
 @freezed
 abstract class SaleInfo with _$SaleInfo {
   const factory SaleInfo(
-    String country,
-     String buyLink,
+ 
+    @nullable  String buyLink,
     ) = _SaleInfo;
   
 

@@ -32,6 +32,7 @@ dependencies:
   injectable: ^0.1.0
   get_it: ^3.1.0
   flutter_hooks: ^0.13.2
+  pull_to_refresh: ^1.6.1
   
 
 

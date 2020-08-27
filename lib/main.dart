@@ -1,3 +1,4 @@
+import 'package:KBook_SaadAhmed/injection.iconfig.dart';
 import 'package:KBook_SaadAhmed/src/cubit/books_cubit.dart';
 import 'package:KBook_SaadAhmed/src/views/books_view.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => BooksCubit(),
+        create: (context) => getIt<BooksCubit>(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Google Books',

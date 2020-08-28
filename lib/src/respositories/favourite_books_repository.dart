@@ -10,52 +10,62 @@ class FavouriteBooksRepository implements IFavouriteBooksRepository {
 
   @override
   Future addToFavourites(String id) async {
+    List<String> result = [];
     try {
-      var ids = await _sharedPrefs.getFromDisk("favs") as List<String>;
-      var result;
+      var ids = await _sharedPrefs.getFromDisk("favs");
+
       if (ids != null) {
-        ids.add(id);
-        print("First time Favourited");
-        result = await _sharedPrefs.saveToDisk<List<String>>("favs", ids);
+        if (ids.isNotEmpty) {
+          for (var storedId in ids) {
+            result.add(storedId);
+          }
+        }
+
+        result.add(id);
+        await _sharedPrefs.saveToDisk("favs", result);
       } else {
-        print("Favourited");
-        result = await _sharedPrefs.saveToDisk<List<String>>("favs", [id]);
+        result.add(id);
+        await _sharedPrefs.saveToDisk("favs", result);
       }
+
+      return result;
     } catch (e) {
       throw e;
     }
   }
 
   @override
-  Future unfavourite(String id) async {
+  Future<List<String>> unfavourite(String id) async {
+    List<String> result = [];
     try {
-      var ids = await _sharedPrefs.getFromDisk("favs") as List<String>;
-      var result;
+      var ids = await _sharedPrefs.getFromDisk("favs");
+
       if (ids != null) {
-        if (ids.remove(id)) {
-          print("Unfavourited");
-          result = await _sharedPrefs.saveToDisk<List<String>>("favs", ids);
+        for (var storedId in ids) {
+          result.add(storedId);
+        }
+
+        if (result.remove(id)) {
+          await _sharedPrefs.saveToDisk<List<String>>("favs", result);
         }
       }
+
+      return result;
     } catch (e) {
       throw e;
     }
   }
 
   @override
-  Future<String> checkFavourite(String id) async {
+  Future getFavourite() async {
     try {
-      var ids = await _sharedPrefs.getFromDisk("favs") as List<String>;
-      String newId = "";
+      var ids = await _sharedPrefs.getFromDisk("favs");
+      var newIds = [];
       if (ids != null) {
-        if (ids.contains(id)) {
-          print("Unfavourited");
-          newId = id;
-        
-        }
+        newIds = ids;
       }
 
-      return newId;
+      return newIds;
     } catch (e) {
       throw e;
     }

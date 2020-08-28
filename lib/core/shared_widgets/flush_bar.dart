@@ -12,7 +12,7 @@ showFlushBar(BuildContext context, {@required String msg}) {
       size: 28.0,
       color: Colors.blue[300],
     ),
-    duration: Duration(seconds: 5),
+    duration: Duration(seconds: 2),
     leftBarIndicatorColor: Colors.blue[300],
   )..show(context).then((value) => null);
 }

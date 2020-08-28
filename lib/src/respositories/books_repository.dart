@@ -21,43 +21,38 @@ class BooksRepository implements IBooksRepository {
         final result = await _booksProvider.fetchBooks(startIndex, maxResults);
 
         return result;
-      }  catch(e) {
+      } catch (e) {
         throw e;
       }
     } else {
       print("no connection");
       throw ConnectionException("No Internet Connection");
-     
     }
   }
 
   @override
   Future filterFavourites(List<Volume> volumes) async {
     List<Volume> filteredVolumes = [];
-  
-      try {
-        var ids = _sharedPrefs.getFromDisk("favs") as List<String>;
-        if( ids == null){
+
+    try {
+      var ids = _sharedPrefs.getFromDisk("favs") as List<String>;
+      if (ids == null) {
+        throw NotFoundException("No Favourites");
+      } else {
+        if (ids.isEmpty) {
           throw NotFoundException("No Favourites");
-        }else{
-
-          if(ids.isEmpty){
-            throw NotFoundException("No Favourites");
-          }
-
-          volumes.forEach((volume) {
-             if(ids.contains(volume.id)){
-               filteredVolumes.add(volume);
-             }
-          });
         }
-        
 
-        return filteredVolumes;
-      } catch (e) {
-        throw e;
+        volumes.forEach((volume) {
+          if (ids.contains(volume.id)) {
+            filteredVolumes.add(volume);
+          }
+        });
       }
 
-  
+      return filteredVolumes;
+    } catch (e) {
+      throw e;
+    }
   }
 }

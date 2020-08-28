@@ -13,34 +13,31 @@ class _$FavouriteBooksStateTearOff {
   const _$FavouriteBooksStateTearOff();
 
 // ignore: unused_element
-  UnfavouriteVolume unfavourite(
-      [List<String> ids = const [], String isFavouriteId = '']) {
+  UnfavouriteVolume unfavourite([List<String> favouriteIds = const []]) {
     return UnfavouriteVolume(
-      ids,
-      isFavouriteId,
+      favouriteIds,
     );
   }
 
 // ignore: unused_element
-  FavouriteVolume favourite(List<String> ids, String isFavouriteId) {
+  FavouriteVolume favourite(List<String> favouriteIds) {
     return FavouriteVolume(
-      ids,
-      isFavouriteId,
+      favouriteIds,
     );
   }
 
 // ignore: unused_element
-  FavouriteError error(String msg, String isFavouriteId) {
+  FavouriteError error(String msg, List<String> favouriteIds) {
     return FavouriteError(
       msg,
-      isFavouriteId,
+      favouriteIds,
     );
   }
 
 // ignore: unused_element
-  IsFavourite isFavourite(String isFavouriteId) {
-    return IsFavourite(
-      isFavouriteId,
+  LoadFavourites loadFavourites(List<String> favouriteIds) {
+    return LoadFavourites(
+      favouriteIds,
     );
   }
 }
@@ -49,21 +46,21 @@ class _$FavouriteBooksStateTearOff {
 const $FavouriteBooksState = _$FavouriteBooksStateTearOff();
 
 mixin _$FavouriteBooksState {
-  String get isFavouriteId;
+  List<String> get favouriteIds;
 
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result unfavourite(List<String> ids, String isFavouriteId),
-    @required Result favourite(List<String> ids, String isFavouriteId),
-    @required Result error(String msg, String isFavouriteId),
-    @required Result isFavourite(String isFavouriteId),
+    @required Result unfavourite(List<String> favouriteIds),
+    @required Result favourite(List<String> favouriteIds),
+    @required Result error(String msg, List<String> favouriteIds),
+    @required Result loadFavourites(List<String> favouriteIds),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result unfavourite(List<String> ids, String isFavouriteId),
-    Result favourite(List<String> ids, String isFavouriteId),
-    Result error(String msg, String isFavouriteId),
-    Result isFavourite(String isFavouriteId),
+    Result unfavourite(List<String> favouriteIds),
+    Result favourite(List<String> favouriteIds),
+    Result error(String msg, List<String> favouriteIds),
+    Result loadFavourites(List<String> favouriteIds),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -71,14 +68,14 @@ mixin _$FavouriteBooksState {
     @required Result unfavourite(UnfavouriteVolume value),
     @required Result favourite(FavouriteVolume value),
     @required Result error(FavouriteError value),
-    @required Result isFavourite(IsFavourite value),
+    @required Result loadFavourites(LoadFavourites value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result unfavourite(UnfavouriteVolume value),
     Result favourite(FavouriteVolume value),
     Result error(FavouriteError value),
-    Result isFavourite(IsFavourite value),
+    Result loadFavourites(LoadFavourites value),
     @required Result orElse(),
   });
 
@@ -89,7 +86,7 @@ abstract class $FavouriteBooksStateCopyWith<$Res> {
   factory $FavouriteBooksStateCopyWith(
           FavouriteBooksState value, $Res Function(FavouriteBooksState) then) =
       _$FavouriteBooksStateCopyWithImpl<$Res>;
-  $Res call({String isFavouriteId});
+  $Res call({List<String> favouriteIds});
 }
 
 class _$FavouriteBooksStateCopyWithImpl<$Res>
@@ -102,12 +99,12 @@ class _$FavouriteBooksStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object isFavouriteId = freezed,
+    Object favouriteIds = freezed,
   }) {
     return _then(_value.copyWith(
-      isFavouriteId: isFavouriteId == freezed
-          ? _value.isFavouriteId
-          : isFavouriteId as String,
+      favouriteIds: favouriteIds == freezed
+          ? _value.favouriteIds
+          : favouriteIds as List<String>,
     ));
   }
 }
@@ -118,7 +115,7 @@ abstract class $UnfavouriteVolumeCopyWith<$Res>
           UnfavouriteVolume value, $Res Function(UnfavouriteVolume) then) =
       _$UnfavouriteVolumeCopyWithImpl<$Res>;
   @override
-  $Res call({List<String> ids, String isFavouriteId});
+  $Res call({List<String> favouriteIds});
 }
 
 class _$UnfavouriteVolumeCopyWithImpl<$Res>
@@ -133,62 +130,54 @@ class _$UnfavouriteVolumeCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object ids = freezed,
-    Object isFavouriteId = freezed,
+    Object favouriteIds = freezed,
   }) {
     return _then(UnfavouriteVolume(
-      ids == freezed ? _value.ids : ids as List<String>,
-      isFavouriteId == freezed ? _value.isFavouriteId : isFavouriteId as String,
+      favouriteIds == freezed
+          ? _value.favouriteIds
+          : favouriteIds as List<String>,
     ));
   }
 }
 
 class _$UnfavouriteVolume extends UnfavouriteVolume {
-  _$UnfavouriteVolume([this.ids = const [], this.isFavouriteId = ''])
-      : assert(ids != null),
-        assert(isFavouriteId != null),
+  _$UnfavouriteVolume([this.favouriteIds = const []])
+      : assert(favouriteIds != null),
         super._();
 
   @JsonKey(defaultValue: const [])
   @override
-  final List<String> ids;
-  @JsonKey(defaultValue: '')
-  @override
-  final String isFavouriteId;
+  final List<String> favouriteIds;
 
-  bool _didcheckFavourite = false;
-  String _checkFavourite;
+  bool _didgetFavourites = false;
+  List<String> _getFavourites;
 
   @override
-  String get checkFavourite {
-    if (_didcheckFavourite == false) {
-      _didcheckFavourite = true;
-      _checkFavourite = isFavouriteId;
+  List<String> get getFavourites {
+    if (_didgetFavourites == false) {
+      _didgetFavourites = true;
+      _getFavourites = favouriteIds;
     }
-    return _checkFavourite;
+    return _getFavourites;
   }
 
   @override
   String toString() {
-    return 'FavouriteBooksState.unfavourite(ids: $ids, isFavouriteId: $isFavouriteId, checkFavourite: $checkFavourite)';
+    return 'FavouriteBooksState.unfavourite(favouriteIds: $favouriteIds, getFavourites: $getFavourites)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is UnfavouriteVolume &&
-            (identical(other.ids, ids) ||
-                const DeepCollectionEquality().equals(other.ids, ids)) &&
-            (identical(other.isFavouriteId, isFavouriteId) ||
+            (identical(other.favouriteIds, favouriteIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFavouriteId, isFavouriteId)));
+                    .equals(other.favouriteIds, favouriteIds)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(ids) ^
-      const DeepCollectionEquality().hash(isFavouriteId);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(favouriteIds);
 
   @override
   $UnfavouriteVolumeCopyWith<UnfavouriteVolume> get copyWith =>
@@ -197,30 +186,30 @@ class _$UnfavouriteVolume extends UnfavouriteVolume {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result unfavourite(List<String> ids, String isFavouriteId),
-    @required Result favourite(List<String> ids, String isFavouriteId),
-    @required Result error(String msg, String isFavouriteId),
-    @required Result isFavourite(String isFavouriteId),
+    @required Result unfavourite(List<String> favouriteIds),
+    @required Result favourite(List<String> favouriteIds),
+    @required Result error(String msg, List<String> favouriteIds),
+    @required Result loadFavourites(List<String> favouriteIds),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
-    return unfavourite(ids, isFavouriteId);
+    assert(loadFavourites != null);
+    return unfavourite(favouriteIds);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result unfavourite(List<String> ids, String isFavouriteId),
-    Result favourite(List<String> ids, String isFavouriteId),
-    Result error(String msg, String isFavouriteId),
-    Result isFavourite(String isFavouriteId),
+    Result unfavourite(List<String> favouriteIds),
+    Result favourite(List<String> favouriteIds),
+    Result error(String msg, List<String> favouriteIds),
+    Result loadFavourites(List<String> favouriteIds),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (unfavourite != null) {
-      return unfavourite(ids, isFavouriteId);
+      return unfavourite(favouriteIds);
     }
     return orElse();
   }
@@ -231,12 +220,12 @@ class _$UnfavouriteVolume extends UnfavouriteVolume {
     @required Result unfavourite(UnfavouriteVolume value),
     @required Result favourite(FavouriteVolume value),
     @required Result error(FavouriteError value),
-    @required Result isFavourite(IsFavourite value),
+    @required Result loadFavourites(LoadFavourites value),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
+    assert(loadFavourites != null);
     return unfavourite(this);
   }
 
@@ -246,7 +235,7 @@ class _$UnfavouriteVolume extends UnfavouriteVolume {
     Result unfavourite(UnfavouriteVolume value),
     Result favourite(FavouriteVolume value),
     Result error(FavouriteError value),
-    Result isFavourite(IsFavourite value),
+    Result loadFavourites(LoadFavourites value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -259,12 +248,10 @@ class _$UnfavouriteVolume extends UnfavouriteVolume {
 
 abstract class UnfavouriteVolume extends FavouriteBooksState {
   UnfavouriteVolume._() : super._();
-  factory UnfavouriteVolume([List<String> ids, String isFavouriteId]) =
-      _$UnfavouriteVolume;
+  factory UnfavouriteVolume([List<String> favouriteIds]) = _$UnfavouriteVolume;
 
-  List<String> get ids;
   @override
-  String get isFavouriteId;
+  List<String> get favouriteIds;
   @override
   $UnfavouriteVolumeCopyWith<UnfavouriteVolume> get copyWith;
 }
@@ -275,7 +262,7 @@ abstract class $FavouriteVolumeCopyWith<$Res>
           FavouriteVolume value, $Res Function(FavouriteVolume) then) =
       _$FavouriteVolumeCopyWithImpl<$Res>;
   @override
-  $Res call({List<String> ids, String isFavouriteId});
+  $Res call({List<String> favouriteIds});
 }
 
 class _$FavouriteVolumeCopyWithImpl<$Res>
@@ -290,60 +277,53 @@ class _$FavouriteVolumeCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object ids = freezed,
-    Object isFavouriteId = freezed,
+    Object favouriteIds = freezed,
   }) {
     return _then(FavouriteVolume(
-      ids == freezed ? _value.ids : ids as List<String>,
-      isFavouriteId == freezed ? _value.isFavouriteId : isFavouriteId as String,
+      favouriteIds == freezed
+          ? _value.favouriteIds
+          : favouriteIds as List<String>,
     ));
   }
 }
 
 class _$FavouriteVolume extends FavouriteVolume {
-  _$FavouriteVolume(this.ids, this.isFavouriteId)
-      : assert(ids != null),
-        assert(isFavouriteId != null),
+  _$FavouriteVolume(this.favouriteIds)
+      : assert(favouriteIds != null),
         super._();
 
   @override
-  final List<String> ids;
-  @override
-  final String isFavouriteId;
+  final List<String> favouriteIds;
 
-  bool _didcheckFavourite = false;
-  String _checkFavourite;
+  bool _didgetFavourites = false;
+  List<String> _getFavourites;
 
   @override
-  String get checkFavourite {
-    if (_didcheckFavourite == false) {
-      _didcheckFavourite = true;
-      _checkFavourite = isFavouriteId;
+  List<String> get getFavourites {
+    if (_didgetFavourites == false) {
+      _didgetFavourites = true;
+      _getFavourites = favouriteIds;
     }
-    return _checkFavourite;
+    return _getFavourites;
   }
 
   @override
   String toString() {
-    return 'FavouriteBooksState.favourite(ids: $ids, isFavouriteId: $isFavouriteId, checkFavourite: $checkFavourite)';
+    return 'FavouriteBooksState.favourite(favouriteIds: $favouriteIds, getFavourites: $getFavourites)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is FavouriteVolume &&
-            (identical(other.ids, ids) ||
-                const DeepCollectionEquality().equals(other.ids, ids)) &&
-            (identical(other.isFavouriteId, isFavouriteId) ||
+            (identical(other.favouriteIds, favouriteIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFavouriteId, isFavouriteId)));
+                    .equals(other.favouriteIds, favouriteIds)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(ids) ^
-      const DeepCollectionEquality().hash(isFavouriteId);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(favouriteIds);
 
   @override
   $FavouriteVolumeCopyWith<FavouriteVolume> get copyWith =>
@@ -352,30 +332,30 @@ class _$FavouriteVolume extends FavouriteVolume {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result unfavourite(List<String> ids, String isFavouriteId),
-    @required Result favourite(List<String> ids, String isFavouriteId),
-    @required Result error(String msg, String isFavouriteId),
-    @required Result isFavourite(String isFavouriteId),
+    @required Result unfavourite(List<String> favouriteIds),
+    @required Result favourite(List<String> favouriteIds),
+    @required Result error(String msg, List<String> favouriteIds),
+    @required Result loadFavourites(List<String> favouriteIds),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
-    return favourite(ids, isFavouriteId);
+    assert(loadFavourites != null);
+    return favourite(favouriteIds);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result unfavourite(List<String> ids, String isFavouriteId),
-    Result favourite(List<String> ids, String isFavouriteId),
-    Result error(String msg, String isFavouriteId),
-    Result isFavourite(String isFavouriteId),
+    Result unfavourite(List<String> favouriteIds),
+    Result favourite(List<String> favouriteIds),
+    Result error(String msg, List<String> favouriteIds),
+    Result loadFavourites(List<String> favouriteIds),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (favourite != null) {
-      return favourite(ids, isFavouriteId);
+      return favourite(favouriteIds);
     }
     return orElse();
   }
@@ -386,12 +366,12 @@ class _$FavouriteVolume extends FavouriteVolume {
     @required Result unfavourite(UnfavouriteVolume value),
     @required Result favourite(FavouriteVolume value),
     @required Result error(FavouriteError value),
-    @required Result isFavourite(IsFavourite value),
+    @required Result loadFavourites(LoadFavourites value),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
+    assert(loadFavourites != null);
     return favourite(this);
   }
 
@@ -401,7 +381,7 @@ class _$FavouriteVolume extends FavouriteVolume {
     Result unfavourite(UnfavouriteVolume value),
     Result favourite(FavouriteVolume value),
     Result error(FavouriteError value),
-    Result isFavourite(IsFavourite value),
+    Result loadFavourites(LoadFavourites value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -414,12 +394,10 @@ class _$FavouriteVolume extends FavouriteVolume {
 
 abstract class FavouriteVolume extends FavouriteBooksState {
   FavouriteVolume._() : super._();
-  factory FavouriteVolume(List<String> ids, String isFavouriteId) =
-      _$FavouriteVolume;
+  factory FavouriteVolume(List<String> favouriteIds) = _$FavouriteVolume;
 
-  List<String> get ids;
   @override
-  String get isFavouriteId;
+  List<String> get favouriteIds;
   @override
   $FavouriteVolumeCopyWith<FavouriteVolume> get copyWith;
 }
@@ -430,7 +408,7 @@ abstract class $FavouriteErrorCopyWith<$Res>
           FavouriteError value, $Res Function(FavouriteError) then) =
       _$FavouriteErrorCopyWithImpl<$Res>;
   @override
-  $Res call({String msg, String isFavouriteId});
+  $Res call({String msg, List<String> favouriteIds});
 }
 
 class _$FavouriteErrorCopyWithImpl<$Res>
@@ -446,41 +424,43 @@ class _$FavouriteErrorCopyWithImpl<$Res>
   @override
   $Res call({
     Object msg = freezed,
-    Object isFavouriteId = freezed,
+    Object favouriteIds = freezed,
   }) {
     return _then(FavouriteError(
       msg == freezed ? _value.msg : msg as String,
-      isFavouriteId == freezed ? _value.isFavouriteId : isFavouriteId as String,
+      favouriteIds == freezed
+          ? _value.favouriteIds
+          : favouriteIds as List<String>,
     ));
   }
 }
 
 class _$FavouriteError extends FavouriteError {
-  _$FavouriteError(this.msg, this.isFavouriteId)
+  _$FavouriteError(this.msg, this.favouriteIds)
       : assert(msg != null),
-        assert(isFavouriteId != null),
+        assert(favouriteIds != null),
         super._();
 
   @override
   final String msg;
   @override
-  final String isFavouriteId;
+  final List<String> favouriteIds;
 
-  bool _didcheckFavourite = false;
-  String _checkFavourite;
+  bool _didgetFavourites = false;
+  List<String> _getFavourites;
 
   @override
-  String get checkFavourite {
-    if (_didcheckFavourite == false) {
-      _didcheckFavourite = true;
-      _checkFavourite = isFavouriteId;
+  List<String> get getFavourites {
+    if (_didgetFavourites == false) {
+      _didgetFavourites = true;
+      _getFavourites = favouriteIds;
     }
-    return _checkFavourite;
+    return _getFavourites;
   }
 
   @override
   String toString() {
-    return 'FavouriteBooksState.error(msg: $msg, isFavouriteId: $isFavouriteId, checkFavourite: $checkFavourite)';
+    return 'FavouriteBooksState.error(msg: $msg, favouriteIds: $favouriteIds, getFavourites: $getFavourites)';
   }
 
   @override
@@ -489,16 +469,16 @@ class _$FavouriteError extends FavouriteError {
         (other is FavouriteError &&
             (identical(other.msg, msg) ||
                 const DeepCollectionEquality().equals(other.msg, msg)) &&
-            (identical(other.isFavouriteId, isFavouriteId) ||
+            (identical(other.favouriteIds, favouriteIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFavouriteId, isFavouriteId)));
+                    .equals(other.favouriteIds, favouriteIds)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(msg) ^
-      const DeepCollectionEquality().hash(isFavouriteId);
+      const DeepCollectionEquality().hash(favouriteIds);
 
   @override
   $FavouriteErrorCopyWith<FavouriteError> get copyWith =>
@@ -507,30 +487,30 @@ class _$FavouriteError extends FavouriteError {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result unfavourite(List<String> ids, String isFavouriteId),
-    @required Result favourite(List<String> ids, String isFavouriteId),
-    @required Result error(String msg, String isFavouriteId),
-    @required Result isFavourite(String isFavouriteId),
+    @required Result unfavourite(List<String> favouriteIds),
+    @required Result favourite(List<String> favouriteIds),
+    @required Result error(String msg, List<String> favouriteIds),
+    @required Result loadFavourites(List<String> favouriteIds),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
-    return error(msg, isFavouriteId);
+    assert(loadFavourites != null);
+    return error(msg, favouriteIds);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result unfavourite(List<String> ids, String isFavouriteId),
-    Result favourite(List<String> ids, String isFavouriteId),
-    Result error(String msg, String isFavouriteId),
-    Result isFavourite(String isFavouriteId),
+    Result unfavourite(List<String> favouriteIds),
+    Result favourite(List<String> favouriteIds),
+    Result error(String msg, List<String> favouriteIds),
+    Result loadFavourites(List<String> favouriteIds),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
-      return error(msg, isFavouriteId);
+      return error(msg, favouriteIds);
     }
     return orElse();
   }
@@ -541,12 +521,12 @@ class _$FavouriteError extends FavouriteError {
     @required Result unfavourite(UnfavouriteVolume value),
     @required Result favourite(FavouriteVolume value),
     @required Result error(FavouriteError value),
-    @required Result isFavourite(IsFavourite value),
+    @required Result loadFavourites(LoadFavourites value),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
+    assert(loadFavourites != null);
     return error(this);
   }
 
@@ -556,7 +536,7 @@ class _$FavouriteError extends FavouriteError {
     Result unfavourite(UnfavouriteVolume value),
     Result favourite(FavouriteVolume value),
     Result error(FavouriteError value),
-    Result isFavourite(IsFavourite value),
+    Result loadFavourites(LoadFavourites value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -569,113 +549,116 @@ class _$FavouriteError extends FavouriteError {
 
 abstract class FavouriteError extends FavouriteBooksState {
   FavouriteError._() : super._();
-  factory FavouriteError(String msg, String isFavouriteId) = _$FavouriteError;
+  factory FavouriteError(String msg, List<String> favouriteIds) =
+      _$FavouriteError;
 
   String get msg;
   @override
-  String get isFavouriteId;
+  List<String> get favouriteIds;
   @override
   $FavouriteErrorCopyWith<FavouriteError> get copyWith;
 }
 
-abstract class $IsFavouriteCopyWith<$Res>
+abstract class $LoadFavouritesCopyWith<$Res>
     implements $FavouriteBooksStateCopyWith<$Res> {
-  factory $IsFavouriteCopyWith(
-          IsFavourite value, $Res Function(IsFavourite) then) =
-      _$IsFavouriteCopyWithImpl<$Res>;
+  factory $LoadFavouritesCopyWith(
+          LoadFavourites value, $Res Function(LoadFavourites) then) =
+      _$LoadFavouritesCopyWithImpl<$Res>;
   @override
-  $Res call({String isFavouriteId});
+  $Res call({List<String> favouriteIds});
 }
 
-class _$IsFavouriteCopyWithImpl<$Res>
+class _$LoadFavouritesCopyWithImpl<$Res>
     extends _$FavouriteBooksStateCopyWithImpl<$Res>
-    implements $IsFavouriteCopyWith<$Res> {
-  _$IsFavouriteCopyWithImpl(
-      IsFavourite _value, $Res Function(IsFavourite) _then)
-      : super(_value, (v) => _then(v as IsFavourite));
+    implements $LoadFavouritesCopyWith<$Res> {
+  _$LoadFavouritesCopyWithImpl(
+      LoadFavourites _value, $Res Function(LoadFavourites) _then)
+      : super(_value, (v) => _then(v as LoadFavourites));
 
   @override
-  IsFavourite get _value => super._value as IsFavourite;
+  LoadFavourites get _value => super._value as LoadFavourites;
 
   @override
   $Res call({
-    Object isFavouriteId = freezed,
+    Object favouriteIds = freezed,
   }) {
-    return _then(IsFavourite(
-      isFavouriteId == freezed ? _value.isFavouriteId : isFavouriteId as String,
+    return _then(LoadFavourites(
+      favouriteIds == freezed
+          ? _value.favouriteIds
+          : favouriteIds as List<String>,
     ));
   }
 }
 
-class _$IsFavourite extends IsFavourite {
-  _$IsFavourite(this.isFavouriteId)
-      : assert(isFavouriteId != null),
+class _$LoadFavourites extends LoadFavourites {
+  _$LoadFavourites(this.favouriteIds)
+      : assert(favouriteIds != null),
         super._();
 
   @override
-  final String isFavouriteId;
+  final List<String> favouriteIds;
 
-  bool _didcheckFavourite = false;
-  String _checkFavourite;
+  bool _didgetFavourites = false;
+  List<String> _getFavourites;
 
   @override
-  String get checkFavourite {
-    if (_didcheckFavourite == false) {
-      _didcheckFavourite = true;
-      _checkFavourite = isFavouriteId;
+  List<String> get getFavourites {
+    if (_didgetFavourites == false) {
+      _didgetFavourites = true;
+      _getFavourites = favouriteIds;
     }
-    return _checkFavourite;
+    return _getFavourites;
   }
 
   @override
   String toString() {
-    return 'FavouriteBooksState.isFavourite(isFavouriteId: $isFavouriteId, checkFavourite: $checkFavourite)';
+    return 'FavouriteBooksState.loadFavourites(favouriteIds: $favouriteIds, getFavourites: $getFavourites)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is IsFavourite &&
-            (identical(other.isFavouriteId, isFavouriteId) ||
+        (other is LoadFavourites &&
+            (identical(other.favouriteIds, favouriteIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFavouriteId, isFavouriteId)));
+                    .equals(other.favouriteIds, favouriteIds)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(isFavouriteId);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(favouriteIds);
 
   @override
-  $IsFavouriteCopyWith<IsFavourite> get copyWith =>
-      _$IsFavouriteCopyWithImpl<IsFavourite>(this, _$identity);
+  $LoadFavouritesCopyWith<LoadFavourites> get copyWith =>
+      _$LoadFavouritesCopyWithImpl<LoadFavourites>(this, _$identity);
 
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result unfavourite(List<String> ids, String isFavouriteId),
-    @required Result favourite(List<String> ids, String isFavouriteId),
-    @required Result error(String msg, String isFavouriteId),
-    @required Result isFavourite(String isFavouriteId),
+    @required Result unfavourite(List<String> favouriteIds),
+    @required Result favourite(List<String> favouriteIds),
+    @required Result error(String msg, List<String> favouriteIds),
+    @required Result loadFavourites(List<String> favouriteIds),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
-    return isFavourite(isFavouriteId);
+    assert(loadFavourites != null);
+    return loadFavourites(favouriteIds);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result unfavourite(List<String> ids, String isFavouriteId),
-    Result favourite(List<String> ids, String isFavouriteId),
-    Result error(String msg, String isFavouriteId),
-    Result isFavourite(String isFavouriteId),
+    Result unfavourite(List<String> favouriteIds),
+    Result favourite(List<String> favouriteIds),
+    Result error(String msg, List<String> favouriteIds),
+    Result loadFavourites(List<String> favouriteIds),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (isFavourite != null) {
-      return isFavourite(isFavouriteId);
+    if (loadFavourites != null) {
+      return loadFavourites(favouriteIds);
     }
     return orElse();
   }
@@ -686,13 +669,13 @@ class _$IsFavourite extends IsFavourite {
     @required Result unfavourite(UnfavouriteVolume value),
     @required Result favourite(FavouriteVolume value),
     @required Result error(FavouriteError value),
-    @required Result isFavourite(IsFavourite value),
+    @required Result loadFavourites(LoadFavourites value),
   }) {
     assert(unfavourite != null);
     assert(favourite != null);
     assert(error != null);
-    assert(isFavourite != null);
-    return isFavourite(this);
+    assert(loadFavourites != null);
+    return loadFavourites(this);
   }
 
   @override
@@ -701,23 +684,23 @@ class _$IsFavourite extends IsFavourite {
     Result unfavourite(UnfavouriteVolume value),
     Result favourite(FavouriteVolume value),
     Result error(FavouriteError value),
-    Result isFavourite(IsFavourite value),
+    Result loadFavourites(LoadFavourites value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (isFavourite != null) {
-      return isFavourite(this);
+    if (loadFavourites != null) {
+      return loadFavourites(this);
     }
     return orElse();
   }
 }
 
-abstract class IsFavourite extends FavouriteBooksState {
-  IsFavourite._() : super._();
-  factory IsFavourite(String isFavouriteId) = _$IsFavourite;
+abstract class LoadFavourites extends FavouriteBooksState {
+  LoadFavourites._() : super._();
+  factory LoadFavourites(List<String> favouriteIds) = _$LoadFavourites;
 
   @override
-  String get isFavouriteId;
+  List<String> get favouriteIds;
   @override
-  $IsFavouriteCopyWith<IsFavourite> get copyWith;
+  $LoadFavouritesCopyWith<LoadFavourites> get copyWith;
 }

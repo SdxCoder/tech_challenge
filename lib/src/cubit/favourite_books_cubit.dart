@@ -10,35 +10,44 @@ part 'favourite_books_cubit.freezed.dart';
 class FavouriteBooksCubit extends Cubit<FavouriteBooksState> {
   final IFavouriteBooksRepository _favouriteBooksRepository;
 
-  FavouriteBooksCubit(this._favouriteBooksRepository) : super(FavouriteBooksState.unfavourite());
+  FavouriteBooksCubit(this._favouriteBooksRepository)
+      : super(FavouriteBooksState.unfavourite());
 
   Future addToFavourite(String id) async {
-    try{
-      await _favouriteBooksRepository.addToFavourites(id);
-      emit(FavouriteBooksState.favourite([id], id));
-    }
-    catch(e){
-      emit(FavouriteBooksState.error(e.toString(), id));
+    List<String> favIds = [];
+    try {
+      List<String> ids = await _favouriteBooksRepository.addToFavourites(id);
+      favIds = ids;
+      emit(FavouriteBooksState.favourite(ids));
+    } catch (e) {
+      emit(FavouriteBooksState.error(e.toString(), favIds));
     }
   }
+
 
   Future unFavourite(String id) async {
-     try{
-      await _favouriteBooksRepository.unfavourite(id);
-      emit(FavouriteBooksState.unfavourite([id], id));
-    }
-    catch(e){
-      emit(FavouriteBooksState.error(e.toString(), id));
+    List<String> favIds = [];
+    try {
+       List<String> ids = await _favouriteBooksRepository.unfavourite(id);
+      favIds.add(id);
+      emit(FavouriteBooksState.unfavourite(ids));
+    } catch (e) {
+      emit(FavouriteBooksState.error(e.toString(), favIds));
     }
   }
 
-  Future checkFavourite(String id) async {
-     try{
-      var result = await _favouriteBooksRepository.checkFavourite(id);
-      emit(FavouriteBooksState.isFavourite(result));
-    }
-    catch(e){
-      emit(FavouriteBooksState.error(e.toString(), id));
+  Future checkFavourite() async {
+    List<String> favIds = [];
+    try {
+       var result = await _favouriteBooksRepository.getFavourite();
+
+       for(var id in result){
+         favIds.add(id);
+       }
+     
+      emit(FavouriteBooksState.loadFavourites(favIds));
+    } catch (e) {
+      emit(FavouriteBooksState.error(e.toString(), favIds));
     }
   }
 }

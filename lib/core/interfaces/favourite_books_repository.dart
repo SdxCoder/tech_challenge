@@ -8,5 +8,5 @@ import 'package:injectable/injectable.dart';
 abstract class IFavouriteBooksRepository{
   Future addToFavourites(String id);
   Future unfavourite(String id);
-  Future<String> checkFavourite(String id);
+  Future getFavourite();
 }

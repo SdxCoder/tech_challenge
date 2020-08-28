@@ -31,7 +31,6 @@ class BooksProvider implements IBooksProvider {
     try {
       response = await dio.get(url);
       if (response != null && response.statusCode == 200) {
-       // print(response.data["items"]);
         int totalResults = response.data["totalItems"] as int;
         if(startIndex > totalResults){
           throw EndOfResulException("");

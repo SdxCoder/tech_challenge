@@ -33,6 +33,7 @@ class SharedPrefs {
 
   getFromDisk(String key){
     var value = _preferences.get(key);
+    
     print('(TRACE: SharedPrefs:_getFromDisk)  key: $key value: $value');
     return value;
   }

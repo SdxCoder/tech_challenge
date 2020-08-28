@@ -7,5 +7,4 @@ import 'package:injectable/injectable.dart';
 @injectable
 abstract class IBooksProvider{
   Future<List<Volume>> fetchBooks(int startIndex, int maxResults);
-  Future<List<Volume>> fetchBooksById(List<String> ids);
 }

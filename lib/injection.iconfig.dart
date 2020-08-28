@@ -11,7 +11,10 @@ import 'package:KBook_SaadAhmed/core/shared_services/shared_prefs.dart';
 import 'package:KBook_SaadAhmed/core/shared_services/network_info.dart';
 import 'package:KBook_SaadAhmed/src/providers/books_provider.dart';
 import 'package:KBook_SaadAhmed/src/respositories/books_repository.dart';
+import 'package:KBook_SaadAhmed/src/cubit/favourite_books_cubit.dart';
+import 'package:KBook_SaadAhmed/core/interfaces/favourite_books_repository.dart';
 import 'package:KBook_SaadAhmed/src/cubit/books_cubit.dart';
+import 'package:KBook_SaadAhmed/src/respositories/favourite_books_repository.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -32,5 +35,11 @@ void $initGetIt({String environment}) {
           getIt<INetworkInfo>(),
           getIt<SharedPrefs>(),
         ))
-    ..registerFactory<BooksCubit>(() => BooksCubit(getIt<IBooksRepository>()));
+    ..registerFactory<FavouriteBooksCubit>(
+        () => FavouriteBooksCubit(getIt<IFavouriteBooksRepository>()))
+    ..registerFactory<BooksCubit>(() => BooksCubit(getIt<IBooksRepository>()))
+    ..registerFactory<IFavouriteBooksRepository>(
+        () => FavouriteBooksRepository(getIt<SharedPrefs>()))
+    ..registerFactory<FavouriteBooksRepository>(
+        () => FavouriteBooksRepository(getIt<SharedPrefs>()));
 }

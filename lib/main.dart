@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'injection.dart';
+import 'src/cubit/favourite_books_cubit.dart';
 
 void main() {
   configureInjection();
@@ -17,7 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => getIt<BooksCubit>(),
-        child: MaterialApp(
+        child
+        
+        : BlocProvider(
+        create: (_) => getIt<FavouriteBooksCubit>(),
+        child:MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Google Books',
           theme: ThemeData(
@@ -26,6 +31,6 @@ class MyApp extends StatelessWidget {
             
           ),
           home: BooksView(),
-        ));
+        )));
   }
 }

@@ -54,47 +54,4 @@ class BooksProvider implements IBooksProvider {
     return _volumes;
   }
 
-  Future<List<Volume>> fetchBooksById(List<String> ids) async {
-    List<Volume> volumes= List<Volume>();
-    BaseOptions options = new BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-    );
-
-    Dio dio = new Dio(options);
-
-    ids.forEach((id) async {
-      var url = "$baseUrl/$id?key=$apiKey";
-
-      
-      Response response;
-      Volume volume;
-
-      dio.interceptors
-          .add(LogInterceptor(requestBody: true, responseBody: true));
-
-      try {
-        response = await dio.get(url);
-
-        // if (response != null) {
-        //   throw NotFoundException("Not Found");
-        // }
-
-        if (response != null || response.statusCode == 200) {
-          volume = Volume.fromJson(response.data);
-        } else {
-          throw ServerException(
-              "Error Code ${response.statusCode}\n${response.statusMessage}");
-        }
-      } catch (e) {
-        print(e.toString());
-        throw UnknownException(e.message);
-      }
-
-      volumes.add(volume);
-    });
-
-    return volumes;
-  }
 }

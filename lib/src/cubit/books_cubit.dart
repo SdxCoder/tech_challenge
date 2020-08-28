@@ -34,7 +34,7 @@ class BooksCubit extends Cubit<BooksState> {
 
   Future fetchFavouriteBooks() async {
     try {
-      var result = await _booksRepository.fetchBookById(state.volumes);
+      var result = await _booksRepository.filterFavourites(state.volumes);
      
 
       emit(BooksState.loaded(state.volumes + result, false));

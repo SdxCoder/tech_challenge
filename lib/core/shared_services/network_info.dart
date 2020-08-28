@@ -13,7 +13,8 @@ class NetworkInfo implements INetworkInfo {
     return await dataConnectionChecker.hasConnection;
   }
 
-  StreamSubscription<DataConnectionStatus> subscribe(Function callback) {
+  @override
+  StreamSubscription<DataConnectionStatus> subscribe(Function(DataConnectionStatus) callback) {
     return dataConnectionChecker.onStatusChange.listen(callback);
   }
 

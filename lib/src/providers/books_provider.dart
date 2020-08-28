@@ -9,11 +9,11 @@ const String apiKey = "AIzaSyAfDpUg39EFeAB9gQJLNHc-QSRu2chfAm0";
 @injectable
 class BooksProvider implements IBooksProvider {
   final baseUrl = "https://www.googleapis.com/books/v1/volumes";
-  List<Volume> _volumes = List<Volume>();
 
+  
   Future<List<Volume>> fetchBooks(int startIndex, int maxResults) async {
     var url =
-        "$baseUrl?q=flutterDevelopment&maxResults=$maxResults&startIndex=$startIndex";
+        "$baseUrl?q=flutter&maxResults=$maxResults&startIndex=$startIndex";
 
     BaseOptions options = new BaseOptions(
       baseUrl: baseUrl,
@@ -22,6 +22,8 @@ class BooksProvider implements IBooksProvider {
     );
     Dio dio = new Dio(options);
     Response response;
+    List<Volume> _volumes = List<Volume>();
+
 
 
    dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
@@ -30,6 +32,10 @@ class BooksProvider implements IBooksProvider {
       response = await dio.get(url);
       if (response != null && response.statusCode == 200) {
        // print(response.data["items"]);
+        int totalResults = response.data["totalItems"] as int;
+        if(startIndex > totalResults){
+          throw EndOfResulException("");
+        }
         for (var json in response.data["items"]) {
         
           _volumes.add(Volume.fromJson(json));
@@ -40,7 +46,7 @@ class BooksProvider implements IBooksProvider {
       }
     } catch (e) {
       print(e.toString());
-      throw UnknownException(e.message);
+      throw UnknownException("Oops! Something went wrong");
     }
 
     print(_volumes.length);

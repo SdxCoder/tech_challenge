@@ -1,3 +1,4 @@
+import 'package:KBook_SaadAhmed/core/shared_widgets/flush_bar.dart';
 import 'package:KBook_SaadAhmed/src/cubit/books_cubit.dart';
 
 import 'package:KBook_SaadAhmed/src/views/books_details_view.dart';
@@ -13,18 +14,14 @@ class BooksView extends StatefulWidget {
 }
 
 class _BooksViewState extends State<BooksView> {
-    LoadStatus status = LoadStatus.normal;
-    ScrollController _controller;
+  LoadStatus status = LoadStatus.normal;
+  bool filterEnabled = false;
+
   @override
   void initState() {
-     _controller = ScrollController(
-      initialScrollOffset: 0.0
-    );
     BlocProvider.of<BooksCubit>(context).fetchBooks();
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +33,6 @@ class _BooksViewState extends State<BooksView> {
           "Books",
           style: TextStyle(color: Colors.black),
         ),
-        actions: [
-          IconButton(icon: Icon(Icons.favorite_border), onPressed: () async {})
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,7 +50,16 @@ class _BooksViewState extends State<BooksView> {
                 child: ListTile(
                   leading: Icon(Icons.filter_list),
                   title: Text("Filter Favorite Books"),
-                  trailing: CheckBoxWidget(onChanged: (value) {
+                  trailing: CheckBoxWidget(onChanged: (value) async {
+                    setState(() {
+                      filterEnabled = value;
+                    });
+                    if (value == true) {
+                      await context.bloc<BooksCubit>().fetchFavouriteBooks();
+                    } else {
+                      await context.bloc<BooksCubit>().fetchBooks();
+                    }
+
                     print(value);
                   }),
                 ),
@@ -73,71 +76,89 @@ class _BooksViewState extends State<BooksView> {
     return BlocConsumer<BooksCubit, BooksState>(
       listener: (context, state) {
         if (state is BooksError) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          if (state.endOfResults == false) {
+            showFlushBar(
+              context,
+              msg: state.message,
+            );
+          }
         }
       },
       builder: (context, state) {
-        if (state is BooksInitial) {
-          return Offstage();
-        } else if (state is BooksLoading) {
-           return Center(child:CircularProgressIndicator());
-        } else if (state is BooksLoaded) {
-
-          if(_controller.hasClients){
- _controller.animateTo( _controller.position.maxScrollExtent, duration: Duration(milliseconds: 1000), curve:  Curves.ease);
-         
+        if (state.volumesList.isEmpty && !(state is BooksError)) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          if (filterEnabled == true) {
+            return _buildFavouritesList(state);
+          } else {
+            return _buildLoadedList(state);
           }
-          return LoadAny(
-              status: status,
-              loadingMsg: 'Loading',
-              errorMsg: 'Failed to load',
-              finishMsg: 'loaded',
-              onLoadMore: () async {
-                setState(() {
-                  status = LoadStatus.loading;
-                });
-                print("onLoadMore");
-                await Future.delayed(Duration(seconds: 0, milliseconds: 100));
-                await context
-                    .bloc<BooksCubit>()
-                    .fetchBooks(startIndex: state.volumes.length - 1);
-                setState(() {
-                  status = LoadStatus.normal;
-                });
-              },
-              child: _booksList(state));
         }
       },
     );
   }
 
+  Widget _buildFavouritesList(BooksState state) {
+    if (state.volumes.isEmpty) {
+      return Center(
+        child: Text("No Favourites"),
+      );
+    }
 
+    return _booksList(state);
+  }
 
-  Widget _booksList(state) {
+  Widget _buildLoadedList(BooksState state) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context
+            .bloc<BooksCubit>()
+            .fetchBooks(startIndex: state.volumes.length);
+      },
+      child: LoadAny(
+          status: status,
+          loadingMsg: 'Loading',
+          errorMsg: 'Failed to load',
+          finishMsg: 'Load complete',
+          onLoadMore: () async {
+            setState(() {
+              status = LoadStatus.loading;
+            });
+
+            await context
+                .bloc<BooksCubit>()
+                .fetchBooks(startIndex: state.volumes.length - 1);
+            if (state is BooksError && state.endOfResults == false) {
+              setState(() {
+                status = LoadStatus.error;
+              });
+            } else {
+              setState(() {
+                status = LoadStatus.normal;
+              });
+            }
+          },
+          child: _booksList(state)),
+    );
+  }
+
+  Widget _booksList(BooksState state) {
     return CustomScrollView(
-      controller: _controller,
       slivers: [
         SliverGrid(
-
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 2 / 3,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
               crossAxisCount: 2),
           delegate:
-              SliverChildBuilderDelegate(
-                
-                (BuildContext context, int index) {
+              SliverChildBuilderDelegate((BuildContext context, int index) {
             final volume = state.volumes[index];
 
             return InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => BookDetailsView()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BookDetailsView(volume: volume)));
               },
               child: volume.volumeInfo.imageLinks?.thumbnail == null
                   ? Center(child: Text("No Preview"))
@@ -151,37 +172,10 @@ class _BooksViewState extends State<BooksView> {
                                   volume.volumeInfo?.imageLinks?.thumbnail))),
                     ),
             );
-          },
-          
-           childCount: state.volumes.length),
+          }, childCount: state.volumes.length),
         ),
       ],
     );
-  }
-
-   showOverlay(BuildContext context) async {
-    OverlayState overlayState = Overlay.of(context);
-    OverlayEntry overlayEntry = OverlayEntry(
-        builder: (context) => Align(
-              alignment: Alignment.bottomCenter,
-              child: CircularProgressIndicator()
-            ));
-
-// OverlayEntry overlayEntry = OverlayEntry(
-//         builder: (context) => Positioned(
-//               top: MediaQuery.of(context).size.height / 2.0,
-//               width: MediaQuery.of(context).size.width / 2.0,
-//               child: CircleAvatar(
-//                 radius: 50.0,
-//                 backgroundColor: Colors.red,
-//                 child: Text("1"),
-//               ),
-//             ));
-    overlayState.insert(overlayEntry);
-
-    await Future.delayed(Duration(seconds: 2));
-
-    overlayEntry.remove();
   }
 }
 

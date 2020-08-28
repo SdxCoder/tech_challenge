@@ -10,6 +10,12 @@ class UnknownException implements Exception {
   UnknownException(this.message);
 }
 
+class EndOfResulException implements Exception {
+  final String message;
+
+  EndOfResulException(this.message);
+}
+
 class ConnectionException implements Exception {
   final String message;
 

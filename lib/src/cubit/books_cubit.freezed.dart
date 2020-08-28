@@ -13,31 +13,28 @@ class _$BooksStateTearOff {
   const _$BooksStateTearOff();
 
 // ignore: unused_element
-  BooksInitial inital() {
-    return const BooksInitial();
-  }
-
-// ignore: unused_element
-  FavouriteBooks noFavourites() {
-    return const FavouriteBooks();
-  }
-
-// ignore: unused_element
-  BooksLoading loading() {
-    return const BooksLoading();
-  }
-
-// ignore: unused_element
-  BooksLoaded loaded(List<Volume> volumes) {
-    return BooksLoaded(
+  BooksInitial initial(
+      [List<Volume> volumes = const [], bool endOfResults = false]) {
+    return BooksInitial(
       volumes,
+      endOfResults,
     );
   }
 
 // ignore: unused_element
-  BooksError error(String message) {
+  BooksLoaded loaded(List<Volume> volumes, bool endOfResults) {
+    return BooksLoaded(
+      volumes,
+      endOfResults,
+    );
+  }
+
+// ignore: unused_element
+  BooksError error(String message, List<Volume> volumes, bool endOfResults) {
     return BooksError(
       message,
+      volumes,
+      endOfResults,
     );
   }
 }
@@ -46,46 +43,45 @@ class _$BooksStateTearOff {
 const $BooksState = _$BooksStateTearOff();
 
 mixin _$BooksState {
+  List<Volume> get volumes;
+  bool get endOfResults;
+
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
+    @required Result initial(List<Volume> volumes, bool endOfResults),
+    @required Result loaded(List<Volume> volumes, bool endOfResults),
+    @required
+        Result error(String message, List<Volume> volumes, bool endOfResults),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
+    Result initial(List<Volume> volumes, bool endOfResults),
+    Result loaded(List<Volume> volumes, bool endOfResults),
+    Result error(String message, List<Volume> volumes, bool endOfResults),
     @required Result orElse(),
   });
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
+    @required Result initial(BooksInitial value),
     @required Result loaded(BooksLoaded value),
     @required Result error(BooksError value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
+    Result initial(BooksInitial value),
     Result loaded(BooksLoaded value),
     Result error(BooksError value),
     @required Result orElse(),
   });
+
+  $BooksStateCopyWith<BooksState> get copyWith;
 }
 
 abstract class $BooksStateCopyWith<$Res> {
   factory $BooksStateCopyWith(
           BooksState value, $Res Function(BooksState) then) =
       _$BooksStateCopyWithImpl<$Res>;
+  $Res call({List<Volume> volumes, bool endOfResults});
 }
 
 class _$BooksStateCopyWithImpl<$Res> implements $BooksStateCopyWith<$Res> {
@@ -94,12 +90,27 @@ class _$BooksStateCopyWithImpl<$Res> implements $BooksStateCopyWith<$Res> {
   final BooksState _value;
   // ignore: unused_field
   final $Res Function(BooksState) _then;
+
+  @override
+  $Res call({
+    Object volumes = freezed,
+    Object endOfResults = freezed,
+  }) {
+    return _then(_value.copyWith(
+      volumes: volumes == freezed ? _value.volumes : volumes as List<Volume>,
+      endOfResults:
+          endOfResults == freezed ? _value.endOfResults : endOfResults as bool,
+    ));
+  }
 }
 
-abstract class $BooksInitialCopyWith<$Res> {
+abstract class $BooksInitialCopyWith<$Res>
+    implements $BooksStateCopyWith<$Res> {
   factory $BooksInitialCopyWith(
           BooksInitial value, $Res Function(BooksInitial) then) =
       _$BooksInitialCopyWithImpl<$Res>;
+  @override
+  $Res call({List<Volume> volumes, bool endOfResults});
 }
 
 class _$BooksInitialCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
@@ -110,54 +121,108 @@ class _$BooksInitialCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
 
   @override
   BooksInitial get _value => super._value as BooksInitial;
+
+  @override
+  $Res call({
+    Object volumes = freezed,
+    Object endOfResults = freezed,
+  }) {
+    return _then(BooksInitial(
+      volumes == freezed ? _value.volumes : volumes as List<Volume>,
+      endOfResults == freezed ? _value.endOfResults : endOfResults as bool,
+    ));
+  }
 }
 
-class _$BooksInitial implements BooksInitial {
-  const _$BooksInitial();
+class _$BooksInitial extends BooksInitial {
+  _$BooksInitial([this.volumes = const [], this.endOfResults = false])
+      : assert(volumes != null),
+        assert(endOfResults != null),
+        super._();
+
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<Volume> volumes;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool endOfResults;
+
+  bool _didvolumesList = false;
+  List<Volume> _volumesList;
+
+  @override
+  List<Volume> get volumesList {
+    if (_didvolumesList == false) {
+      _didvolumesList = true;
+      _volumesList = volumes;
+    }
+    return _volumesList;
+  }
+
+  bool _didhasReachedEndOfResults = false;
+  bool _hasReachedEndOfResults;
+
+  @override
+  bool get hasReachedEndOfResults {
+    if (_didhasReachedEndOfResults == false) {
+      _didhasReachedEndOfResults = true;
+      _hasReachedEndOfResults = endOfResults;
+    }
+    return _hasReachedEndOfResults;
+  }
 
   @override
   String toString() {
-    return 'BooksState.inital()';
+    return 'BooksState.initial(volumes: $volumes, endOfResults: $endOfResults, volumesList: $volumesList, hasReachedEndOfResults: $hasReachedEndOfResults)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is BooksInitial);
+    return identical(this, other) ||
+        (other is BooksInitial &&
+            (identical(other.volumes, volumes) ||
+                const DeepCollectionEquality()
+                    .equals(other.volumes, volumes)) &&
+            (identical(other.endOfResults, endOfResults) ||
+                const DeepCollectionEquality()
+                    .equals(other.endOfResults, endOfResults)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(volumes) ^
+      const DeepCollectionEquality().hash(endOfResults);
+
+  @override
+  $BooksInitialCopyWith<BooksInitial> get copyWith =>
+      _$BooksInitialCopyWithImpl<BooksInitial>(this, _$identity);
 
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
+    @required Result initial(List<Volume> volumes, bool endOfResults),
+    @required Result loaded(List<Volume> volumes, bool endOfResults),
+    @required
+        Result error(String message, List<Volume> volumes, bool endOfResults),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
-    return inital();
+    return initial(volumes, endOfResults);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
+    Result initial(List<Volume> volumes, bool endOfResults),
+    Result loaded(List<Volume> volumes, bool endOfResults),
+    Result error(String message, List<Volume> volumes, bool endOfResults),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (inital != null) {
-      return inital();
+    if (initial != null) {
+      return initial(volumes, endOfResults);
     }
     return orElse();
   }
@@ -165,257 +230,51 @@ class _$BooksInitial implements BooksInitial {
   @override
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
+    @required Result initial(BooksInitial value),
     @required Result loaded(BooksLoaded value),
     @required Result error(BooksError value),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
-    return inital(this);
+    return initial(this);
   }
 
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
+    Result initial(BooksInitial value),
     Result loaded(BooksLoaded value),
     Result error(BooksError value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (inital != null) {
-      return inital(this);
+    if (initial != null) {
+      return initial(this);
     }
     return orElse();
   }
 }
 
-abstract class BooksInitial implements BooksState {
-  const factory BooksInitial() = _$BooksInitial;
+abstract class BooksInitial extends BooksState {
+  BooksInitial._() : super._();
+  factory BooksInitial([List<Volume> volumes, bool endOfResults]) =
+      _$BooksInitial;
+
+  @override
+  List<Volume> get volumes;
+  @override
+  bool get endOfResults;
+  @override
+  $BooksInitialCopyWith<BooksInitial> get copyWith;
 }
 
-abstract class $FavouriteBooksCopyWith<$Res> {
-  factory $FavouriteBooksCopyWith(
-          FavouriteBooks value, $Res Function(FavouriteBooks) then) =
-      _$FavouriteBooksCopyWithImpl<$Res>;
-}
-
-class _$FavouriteBooksCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
-    implements $FavouriteBooksCopyWith<$Res> {
-  _$FavouriteBooksCopyWithImpl(
-      FavouriteBooks _value, $Res Function(FavouriteBooks) _then)
-      : super(_value, (v) => _then(v as FavouriteBooks));
-
-  @override
-  FavouriteBooks get _value => super._value as FavouriteBooks;
-}
-
-class _$FavouriteBooks implements FavouriteBooks {
-  const _$FavouriteBooks();
-
-  @override
-  String toString() {
-    return 'BooksState.noFavourites()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) || (other is FavouriteBooks);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
-  }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
-    assert(loaded != null);
-    assert(error != null);
-    return noFavourites();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (noFavourites != null) {
-      return noFavourites();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
-    @required Result loaded(BooksLoaded value),
-    @required Result error(BooksError value),
-  }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
-    assert(loaded != null);
-    assert(error != null);
-    return noFavourites(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
-    Result loaded(BooksLoaded value),
-    Result error(BooksError value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (noFavourites != null) {
-      return noFavourites(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class FavouriteBooks implements BooksState {
-  const factory FavouriteBooks() = _$FavouriteBooks;
-}
-
-abstract class $BooksLoadingCopyWith<$Res> {
-  factory $BooksLoadingCopyWith(
-          BooksLoading value, $Res Function(BooksLoading) then) =
-      _$BooksLoadingCopyWithImpl<$Res>;
-}
-
-class _$BooksLoadingCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
-    implements $BooksLoadingCopyWith<$Res> {
-  _$BooksLoadingCopyWithImpl(
-      BooksLoading _value, $Res Function(BooksLoading) _then)
-      : super(_value, (v) => _then(v as BooksLoading));
-
-  @override
-  BooksLoading get _value => super._value as BooksLoading;
-}
-
-class _$BooksLoading implements BooksLoading {
-  const _$BooksLoading();
-
-  @override
-  String toString() {
-    return 'BooksState.loading()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) || (other is BooksLoading);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
-  }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
-    assert(loaded != null);
-    assert(error != null);
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
-    @required Result loaded(BooksLoaded value),
-    @required Result error(BooksError value),
-  }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
-    assert(loaded != null);
-    assert(error != null);
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
-    Result loaded(BooksLoaded value),
-    Result error(BooksError value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class BooksLoading implements BooksState {
-  const factory BooksLoading() = _$BooksLoading;
-}
-
-abstract class $BooksLoadedCopyWith<$Res> {
+abstract class $BooksLoadedCopyWith<$Res> implements $BooksStateCopyWith<$Res> {
   factory $BooksLoadedCopyWith(
           BooksLoaded value, $Res Function(BooksLoaded) then) =
       _$BooksLoadedCopyWithImpl<$Res>;
-  $Res call({List<Volume> volumes});
+  @override
+  $Res call({List<Volume> volumes, bool endOfResults});
 }
 
 class _$BooksLoadedCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
@@ -430,22 +289,53 @@ class _$BooksLoadedCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object volumes = freezed,
+    Object endOfResults = freezed,
   }) {
     return _then(BooksLoaded(
       volumes == freezed ? _value.volumes : volumes as List<Volume>,
+      endOfResults == freezed ? _value.endOfResults : endOfResults as bool,
     ));
   }
 }
 
-class _$BooksLoaded implements BooksLoaded {
-  const _$BooksLoaded(this.volumes) : assert(volumes != null);
+class _$BooksLoaded extends BooksLoaded {
+  _$BooksLoaded(this.volumes, this.endOfResults)
+      : assert(volumes != null),
+        assert(endOfResults != null),
+        super._();
 
   @override
   final List<Volume> volumes;
+  @override
+  final bool endOfResults;
+
+  bool _didvolumesList = false;
+  List<Volume> _volumesList;
+
+  @override
+  List<Volume> get volumesList {
+    if (_didvolumesList == false) {
+      _didvolumesList = true;
+      _volumesList = volumes;
+    }
+    return _volumesList;
+  }
+
+  bool _didhasReachedEndOfResults = false;
+  bool _hasReachedEndOfResults;
+
+  @override
+  bool get hasReachedEndOfResults {
+    if (_didhasReachedEndOfResults == false) {
+      _didhasReachedEndOfResults = true;
+      _hasReachedEndOfResults = endOfResults;
+    }
+    return _hasReachedEndOfResults;
+  }
 
   @override
   String toString() {
-    return 'BooksState.loaded(volumes: $volumes)';
+    return 'BooksState.loaded(volumes: $volumes, endOfResults: $endOfResults, volumesList: $volumesList, hasReachedEndOfResults: $hasReachedEndOfResults)';
   }
 
   @override
@@ -453,12 +343,18 @@ class _$BooksLoaded implements BooksLoaded {
     return identical(this, other) ||
         (other is BooksLoaded &&
             (identical(other.volumes, volumes) ||
-                const DeepCollectionEquality().equals(other.volumes, volumes)));
+                const DeepCollectionEquality()
+                    .equals(other.volumes, volumes)) &&
+            (identical(other.endOfResults, endOfResults) ||
+                const DeepCollectionEquality()
+                    .equals(other.endOfResults, endOfResults)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(volumes);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(volumes) ^
+      const DeepCollectionEquality().hash(endOfResults);
 
   @override
   $BooksLoadedCopyWith<BooksLoaded> get copyWith =>
@@ -467,33 +363,28 @@ class _$BooksLoaded implements BooksLoaded {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
+    @required Result initial(List<Volume> volumes, bool endOfResults),
+    @required Result loaded(List<Volume> volumes, bool endOfResults),
+    @required
+        Result error(String message, List<Volume> volumes, bool endOfResults),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
-    return loaded(volumes);
+    return loaded(volumes, endOfResults);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
+    Result initial(List<Volume> volumes, bool endOfResults),
+    Result loaded(List<Volume> volumes, bool endOfResults),
+    Result error(String message, List<Volume> volumes, bool endOfResults),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (loaded != null) {
-      return loaded(volumes);
+      return loaded(volumes, endOfResults);
     }
     return orElse();
   }
@@ -501,15 +392,11 @@ class _$BooksLoaded implements BooksLoaded {
   @override
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
+    @required Result initial(BooksInitial value),
     @required Result loaded(BooksLoaded value),
     @required Result error(BooksError value),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
     return loaded(this);
@@ -518,9 +405,7 @@ class _$BooksLoaded implements BooksLoaded {
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
+    Result initial(BooksInitial value),
     Result loaded(BooksLoaded value),
     Result error(BooksError value),
     @required Result orElse(),
@@ -533,18 +418,24 @@ class _$BooksLoaded implements BooksLoaded {
   }
 }
 
-abstract class BooksLoaded implements BooksState {
-  const factory BooksLoaded(List<Volume> volumes) = _$BooksLoaded;
+abstract class BooksLoaded extends BooksState {
+  BooksLoaded._() : super._();
+  factory BooksLoaded(List<Volume> volumes, bool endOfResults) = _$BooksLoaded;
 
+  @override
   List<Volume> get volumes;
+  @override
+  bool get endOfResults;
+  @override
   $BooksLoadedCopyWith<BooksLoaded> get copyWith;
 }
 
-abstract class $BooksErrorCopyWith<$Res> {
+abstract class $BooksErrorCopyWith<$Res> implements $BooksStateCopyWith<$Res> {
   factory $BooksErrorCopyWith(
           BooksError value, $Res Function(BooksError) then) =
       _$BooksErrorCopyWithImpl<$Res>;
-  $Res call({String message});
+  @override
+  $Res call({String message, List<Volume> volumes, bool endOfResults});
 }
 
 class _$BooksErrorCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
@@ -558,22 +449,58 @@ class _$BooksErrorCopyWithImpl<$Res> extends _$BooksStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object message = freezed,
+    Object volumes = freezed,
+    Object endOfResults = freezed,
   }) {
     return _then(BooksError(
       message == freezed ? _value.message : message as String,
+      volumes == freezed ? _value.volumes : volumes as List<Volume>,
+      endOfResults == freezed ? _value.endOfResults : endOfResults as bool,
     ));
   }
 }
 
-class _$BooksError implements BooksError {
-  const _$BooksError(this.message) : assert(message != null);
+class _$BooksError extends BooksError {
+  _$BooksError(this.message, this.volumes, this.endOfResults)
+      : assert(message != null),
+        assert(volumes != null),
+        assert(endOfResults != null),
+        super._();
 
   @override
   final String message;
+  @override
+  final List<Volume> volumes;
+  @override
+  final bool endOfResults;
+
+  bool _didvolumesList = false;
+  List<Volume> _volumesList;
+
+  @override
+  List<Volume> get volumesList {
+    if (_didvolumesList == false) {
+      _didvolumesList = true;
+      _volumesList = volumes;
+    }
+    return _volumesList;
+  }
+
+  bool _didhasReachedEndOfResults = false;
+  bool _hasReachedEndOfResults;
+
+  @override
+  bool get hasReachedEndOfResults {
+    if (_didhasReachedEndOfResults == false) {
+      _didhasReachedEndOfResults = true;
+      _hasReachedEndOfResults = endOfResults;
+    }
+    return _hasReachedEndOfResults;
+  }
 
   @override
   String toString() {
-    return 'BooksState.error(message: $message)';
+    return 'BooksState.error(message: $message, volumes: $volumes, endOfResults: $endOfResults, volumesList: $volumesList, hasReachedEndOfResults: $hasReachedEndOfResults)';
   }
 
   @override
@@ -581,12 +508,22 @@ class _$BooksError implements BooksError {
     return identical(this, other) ||
         (other is BooksError &&
             (identical(other.message, message) ||
-                const DeepCollectionEquality().equals(other.message, message)));
+                const DeepCollectionEquality()
+                    .equals(other.message, message)) &&
+            (identical(other.volumes, volumes) ||
+                const DeepCollectionEquality()
+                    .equals(other.volumes, volumes)) &&
+            (identical(other.endOfResults, endOfResults) ||
+                const DeepCollectionEquality()
+                    .equals(other.endOfResults, endOfResults)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(message);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(message) ^
+      const DeepCollectionEquality().hash(volumes) ^
+      const DeepCollectionEquality().hash(endOfResults);
 
   @override
   $BooksErrorCopyWith<BooksError> get copyWith =>
@@ -595,33 +532,28 @@ class _$BooksError implements BooksError {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result inital(),
-    @required Result noFavourites(),
-    @required Result loading(),
-    @required Result loaded(List<Volume> volumes),
-    @required Result error(String message),
+    @required Result initial(List<Volume> volumes, bool endOfResults),
+    @required Result loaded(List<Volume> volumes, bool endOfResults),
+    @required
+        Result error(String message, List<Volume> volumes, bool endOfResults),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
-    return error(message);
+    return error(message, volumes, endOfResults);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result inital(),
-    Result noFavourites(),
-    Result loading(),
-    Result loaded(List<Volume> volumes),
-    Result error(String message),
+    Result initial(List<Volume> volumes, bool endOfResults),
+    Result loaded(List<Volume> volumes, bool endOfResults),
+    Result error(String message, List<Volume> volumes, bool endOfResults),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
-      return error(message);
+      return error(message, volumes, endOfResults);
     }
     return orElse();
   }
@@ -629,15 +561,11 @@ class _$BooksError implements BooksError {
   @override
   @optionalTypeArgs
   Result map<Result extends Object>({
-    @required Result inital(BooksInitial value),
-    @required Result noFavourites(FavouriteBooks value),
-    @required Result loading(BooksLoading value),
+    @required Result initial(BooksInitial value),
     @required Result loaded(BooksLoaded value),
     @required Result error(BooksError value),
   }) {
-    assert(inital != null);
-    assert(noFavourites != null);
-    assert(loading != null);
+    assert(initial != null);
     assert(loaded != null);
     assert(error != null);
     return error(this);
@@ -646,9 +574,7 @@ class _$BooksError implements BooksError {
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
-    Result inital(BooksInitial value),
-    Result noFavourites(FavouriteBooks value),
-    Result loading(BooksLoading value),
+    Result initial(BooksInitial value),
     Result loaded(BooksLoaded value),
     Result error(BooksError value),
     @required Result orElse(),
@@ -661,9 +587,16 @@ class _$BooksError implements BooksError {
   }
 }
 
-abstract class BooksError implements BooksState {
-  const factory BooksError(String message) = _$BooksError;
+abstract class BooksError extends BooksState {
+  BooksError._() : super._();
+  factory BooksError(String message, List<Volume> volumes, bool endOfResults) =
+      _$BooksError;
 
   String get message;
+  @override
+  List<Volume> get volumes;
+  @override
+  bool get endOfResults;
+  @override
   $BooksErrorCopyWith<BooksError> get copyWith;
 }
